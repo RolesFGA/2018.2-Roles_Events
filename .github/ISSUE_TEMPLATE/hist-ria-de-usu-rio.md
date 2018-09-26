@@ -1,6 +1,6 @@
 ---
 name: História de Usuário
-about: Issue de história de Usuários
+about: Issue de história de Usuários 
 
 ---
 

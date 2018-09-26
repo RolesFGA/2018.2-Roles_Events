@@ -1,6 +1,6 @@
 ---
 name: Geral
-about: Issues de tarefas gerais relacionadas ao projeto.
+about: Issues de tarefas gerais relacionadas ao projeto. 
 
 ---
 
@@ -14,7 +14,7 @@ Uma issue deve ser criada com a finalidade de descrever:
 **Descrição**
 Deve conter uma descrição detalhada explicando a finalidade para a qual à issue foi criada.
 
-**Tarefas :** 
+**Tarefas :**
 - [ ] Tarefa 1;
 
 ***Requisitos:***

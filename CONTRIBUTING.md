@@ -15,7 +15,7 @@ Para contribuir com o projeto é muito fácil e cada pouquinho conta! Basta segu
 Para criação de issue o [template Issue](https://github.com/fga-eps-mds/2018.2-Roles/issues/new/choose) deve ser seguido.
 
 ### Gitflow
-Gitflow é o fluxo planejado para criação de branches. Afim de organizar e poder gerenciar melhor o projeto.
+Gitflow é o fluxo planejado para criação de branches. Afim de organizar e poder gerenciar melhor o projeto. 
 
 #### Nova funcionalidade
 Novas funcionalidades sempre saem da branch **dev**, nunca da master.
