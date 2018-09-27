@@ -9,3 +9,6 @@ class Event(models.Model):
     foods = models.TextField()
     drinks = models.TextField()
     photo = models.ImageField()
+
+    def __str__(self):
+        return self.event_name
