@@ -16,5 +16,8 @@ class Event(models.Model):
     foods = models.TextField()
     drinks = models.TextField()
 
+    class Meta:
+        ordering = ('eventDate', 'eventHour', 'event_name',)
+
     def __str__(self):
         return self.event_name
