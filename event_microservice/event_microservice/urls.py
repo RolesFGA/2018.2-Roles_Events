@@ -8,4 +8,5 @@ urlpatterns = [
     path('event/', include('events.urls')),
     path('login/', obtain_jwt_token),
     path('refresh-token/', refresh_jwt_token),
+    path('api-auth/', include('rest_framework.urls')),
 ]
