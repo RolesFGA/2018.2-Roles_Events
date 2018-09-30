@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Event(models.Model):
     owner = models.ForeignKey('auth.User', related_name='event', on_delete=models.CASCADE)
     event_name = models.CharField("Nome do Evento", max_length=50)
