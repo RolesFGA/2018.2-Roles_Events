@@ -31,6 +31,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
     'NON_FIELD_ERRORS_KEY': 'global',
+    'UPLOADED_FILES_USE_URL': False
 }
 
 JWT_AUTH = {
@@ -102,3 +103,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

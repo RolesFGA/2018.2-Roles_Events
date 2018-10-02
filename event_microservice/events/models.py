@@ -14,7 +14,7 @@ class Event(models.Model):
     eventHour = models.TimeField("Horário do Rolê", auto_now=False, blank=True)
     adultOnly = models.BooleanField("+18", default=False)
     eventDescription = models.TextField("Descrição")
-    photo = models.ImageField("Foto")
+    photo = models.ImageField("Foto", upload_to="media/")
     foods = models.TextField("Comidas")
     drinks = models.TextField("Bebidas")
 
