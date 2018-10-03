@@ -31,7 +31,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
     'NON_FIELD_ERRORS_KEY': 'global',
-    'UPLOADED_FILES_USE_URL': False
 }
 
 JWT_AUTH = {
