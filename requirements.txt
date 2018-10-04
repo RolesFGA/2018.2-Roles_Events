@@ -4,4 +4,3 @@ Pillow==5.2.0
 requests==2.19.1
 PyJWT==1.6.4
 djangorestframework-jwt==1.11.0
-

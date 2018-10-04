@@ -21,18 +21,6 @@ INSTALLED_APPS = [
     'events',
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-    'NON_FIELD_ERRORS_KEY': 'global',
-}
-
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': timedelta(days=2),
@@ -102,3 +90,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
