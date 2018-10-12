@@ -3,6 +3,7 @@ from .models import Event
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.urls import reverse, resolve
+from django.contrib.auth.models import User
 
 
 class ModelTestCase(TestCase):
@@ -10,6 +11,7 @@ class ModelTestCase(TestCase):
 
     def setUp(self):
         """Define the test client and other test variables."""
+        user = User.objects.create(username="User01")
         self.eventName = "Teste"
         self.eventDate = "2018-05-05"
         self.eventHour = "03:03:00"
@@ -19,7 +21,15 @@ class ModelTestCase(TestCase):
         self.foods = "Comidas"
         self.drinks = "Bebidas"
 
-        self.event = Event (eventName=self.eventName, eventDate=self.eventDate,eventHour=self.eventHour,organizer=self.organizer,address=self.address,eventDescription=self.eventDescription,foods=self.foods,drinks=self.drinks)
+        self.event = Event (eventName=self.eventName,
+                            owner=user,
+                            eventDate=self.eventDate,
+                            eventHour=self.eventHour,
+                            organizer=self.organizer,
+                            address=self.address,
+                            eventDescription=self.eventDescription,
+                            foods=self.foods,
+                            drinks=self.drinks)
 
     def test_model_can_create_a_event(self):
         """Test the event model can create a event."""
@@ -34,8 +44,11 @@ class ViewTestCase(TestCase):
 
     def setUp(self):
         """Define the test client and other test variables."""
+        user = User.objects.create(username="User01")
         self.client = APIClient()
+        self.client.force_authenticate(user=user)
         self.event_data = {'eventName': 'Teste1',
+                           'owner': user.id
                            'eventDate': "2018-12-12",
                            'eventHour': "03:03:00",
                            'organizer': "Henrique",
@@ -62,6 +75,12 @@ class ViewTestCase(TestCase):
             format="json")
 
     """ Test: Creating """
+
+    def test_authorization_is_enforced(self):
+        """Test that the api has user authorization."""
+        new_client = APIClient()
+        res = new_client.get('/events/', kwargs={'pk': 3}, format="json")
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_api_event_create(self):
         """Test the api has event creation capability."""

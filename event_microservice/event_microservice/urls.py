@@ -10,6 +10,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls')),
     url(r'^$', views.api_root),
+    path('login/', obtain_jwt_token),
+    path('refresh-token/', refresh_jwt_token),
+    path('api-auth/', include('rest_framework.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

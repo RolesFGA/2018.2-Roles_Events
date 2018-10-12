@@ -13,7 +13,7 @@ def corret_time(value):
 
 
 class Event(models.Model):
-    owner = models.CharField("Criador do Evento", max_length=50, default="")
+    owner = models.ForeignKey('auth.User', related_name='event', on_delete=models.CASCADE)
     eventName = models.CharField("Nome do Evento", max_length=50)
     linkReference = models.URLField("Link de Referência", max_length=200, default="")
     organizer = models.CharField("Nome para Contato", max_length=50)
