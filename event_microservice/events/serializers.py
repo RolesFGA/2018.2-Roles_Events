@@ -9,11 +9,3 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
-
-class UserSerializer(serializers.ModelSerializer):
-    events = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Event.objects.all())
-
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'events')
