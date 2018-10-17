@@ -1,3 +1,76 @@
 from django.test import TestCase
+from .models import Comment
+from django.contrib.auth.models import User
+from rest_framework.test import APIClient
+from rest_framework import status
+from django.urls import reverse, resolve
 
-# Create your tests here.
+
+class ModelTestCase(TestCase):
+    def setUp(self):
+        """Define the test client and other test variables."""
+        user = User.objects.create(username="User01")
+        self.title = "Titulo Teste"
+        self.text = "O comentario vem aqui."
+        self.comment = Comment(author=user,
+                               title=self.title,
+                               text=self.text,)
+
+    def test_model_can_create_a_comment(self):
+        """Test the comment model can create a comment."""
+        old_count = Comment.objects.count()
+        self.comment.save()
+        new_count = Comment.objects.count()
+        self.assertNotEqual(old_count, new_count)
+
+
+class ViewTestCase(TestCase):
+    """Test suite for the api views."""
+
+    def setUp(self):
+        """Define the test client and other test variables."""
+        user = User.objects.create(username="User01")
+        self.client = APIClient()
+        self.client.force_authenticate(user=user)
+        self.comment_data = {'author': user.id,
+                             'title': 'TITULO HERE',
+                             'text': 'O comentario vem aqui'}
+        self.response = self.client.post(
+            reverse('comment-list'),
+            self.comment_data,
+            format="json")
+
+    def test_api_can_create_a_comment(self):
+        """Test the api has bucket creation capability."""
+        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+
+    def test_api_can_get_a_comment(self):
+        """Test the api can get a given comment."""
+        comment = Comment.objects.get()
+        response = self.client.get(
+            reverse('comment-detail',
+            kwargs={'pk': comment.id}), format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, comment)
+
+    def test_api_can_update_comment(self):
+        """Test the api can update a given comment."""
+        comment = Comment.objects.get()
+        change_comment = {'title': 'TITULO HERE',
+                          'text': 'O comentario foi editado'}
+        res = self.client.put(
+            reverse('comment-detail', kwargs={'pk': comment.id}),
+            change_comment, format='json'
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_api_can_delete_comment(self):
+        """Test the api can delete a comment."""
+        comment = Comment.objects.get()
+        response = self.client.delete(
+            reverse('comment-detail', kwargs={'pk': comment.id}),
+            format='json',
+            follow=True)
+
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
