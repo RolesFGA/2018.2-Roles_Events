@@ -40,11 +40,15 @@ class ViewTestCase(TestCase):
             self.comment_data,
             format="json")
 
-    def test_api_can_create_a_comment(self):
+    """ Test: Creating """
+
+    def test_api_comment_create(self):
         """Test the api has bucket creation capability."""
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
 
-    def test_api_can_get_a_comment(self):
+    """ Test: Getting """
+
+    def test_api_comment_get(self):
         """Test the api can get a given comment."""
         comment = Comment.objects.get()
         response = self.client.get(
@@ -54,7 +58,9 @@ class ViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, comment)
 
-    def test_api_can_update_comment(self):
+    """ Test: Updating """
+
+    def test_api_comment_update(self):
         """Test the api can update a given comment."""
         comment = Comment.objects.get()
         change_comment = {'title': 'TITULO HERE',
@@ -65,7 +71,23 @@ class ViewTestCase(TestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
+        """ Test the api cannot update if the user is not the owner """
+
+        user = User.objects.create(username="User02")
+        self.client = APIClient()
+        self.client.force_authenticate(user=user)
+        change_comment = {'title': 'TITULO HERE',
+                          'text': 'O comentario foi editado'}
+        res = self.client.put(
+            reverse('comment-detail', kwargs={'pk': comment.id}),
+            change_comment, format='json'
+        )
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    """ DELETING """
+
     def test_api_can_delete_comment(self):
+
         """Test the api can delete a comment."""
         comment = Comment.objects.get()
         response = self.client.delete(
@@ -74,3 +96,17 @@ class ViewTestCase(TestCase):
             follow=True)
 
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_api_cannot_delete_comment(self):
+
+        """Test the api can delete a comment."""
+        user = User.objects.create(username="User02")
+        self.client = APIClient()
+        self.client.force_authenticate(user=user)
+        comment = Comment.objects.get()
+        response = self.client.delete(
+            reverse('comment-detail', kwargs={'pk': comment.id}),
+            format='json',
+            follow=True)
+
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
