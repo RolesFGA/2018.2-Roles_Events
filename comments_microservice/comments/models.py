@@ -1,14 +1,15 @@
 from django.db import models
+from vote.models import VoteModel
 
-class Comment(models.Model):
+class Comment(VoteModel, models.Model):
     author = models.ForeignKey('auth.User', related_name='comments', on_delete=models.CASCADE)
-    title = models.CharField(max_length=128)
     text = models.CharField(max_length=128)
-    created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
+    answerId = models.IntegerField(default=0)
+    created = models.DateField(auto_now=False, null=True)
+    edited = models.DateField(auto_now=False, null=True)
 
     class Meta:
         ordering = ('created',)
 
     def __str__(self):
-        return self.title
+        return str(self.id)

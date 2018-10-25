@@ -10,10 +10,8 @@ class ModelTestCase(TestCase):
     def setUp(self):
         """Define the test client and other test variables."""
         user = User.objects.create(username="User01")
-        self.title = "Titulo Teste"
         self.text = "O comentario vem aqui."
         self.comment = Comment(author=user,
-                               title=self.title,
                                text=self.text,)
 
     def test_model_can_create_a_comment(self):
@@ -33,7 +31,6 @@ class ViewTestCase(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=user)
         self.comment_data = {'author': user.id,
-                             'title': 'TITULO HERE',
                              'text': 'O comentario vem aqui'}
         self.response = self.client.post(
             reverse('comment-list'),
