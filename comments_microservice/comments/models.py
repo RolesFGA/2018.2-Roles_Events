@@ -1,12 +1,13 @@
 from django.db import models
-from vote.models import VoteModel
+from votes.managers import VotableManager
 
-class Comment(VoteModel, models.Model):
+class Comment(models.Model):
     author = models.ForeignKey('auth.User', related_name='comments', on_delete=models.CASCADE)
     text = models.CharField(max_length=128)
     answerId = models.IntegerField(default=0)
     created = models.DateField(auto_now=False, null=True)
     edited = models.DateField(auto_now=False, null=True)
+    votes = VotableManager()
 
     class Meta:
         ordering = ('created',)
