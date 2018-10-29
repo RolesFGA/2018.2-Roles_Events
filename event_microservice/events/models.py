@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import date
+from votes.managers import VotableManager
+
 
 def not_negative(value):
     if value < 0:
@@ -27,6 +29,7 @@ class Event(models.Model):
     photo = models.ImageField("Foto", default="")
     foods = models.TextField("Comidas")
     drinks = models.TextField("Bebidas")
+    votes = VotableManager()
 
     class Meta:
         ordering = ('eventDate', 'eventHour', 'eventName',)
