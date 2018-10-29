@@ -1,6 +1,6 @@
 __author__ = 'consultadd66'
 from django.test import TestCase
-from tixdo.third_party_apps.votes.models import Vote
+from ..models import Vote
 
 
 class TestVote(TestCase):

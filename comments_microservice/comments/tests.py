@@ -60,8 +60,7 @@ class ViewTestCase(TestCase):
     def test_api_comment_update(self):
         """Test the api can update a given comment."""
         comment = Comment.objects.get()
-        change_comment = {'title': 'TITULO HERE',
-                          'text': 'O comentario foi editado'}
+        change_comment = {'text': 'O comentario foi editado'}
         res = self.client.put(
             reverse('comment-detail', kwargs={'pk': comment.id}),
             change_comment, format='json'
@@ -73,8 +72,7 @@ class ViewTestCase(TestCase):
         user = User.objects.create(username="User02")
         self.client = APIClient()
         self.client.force_authenticate(user=user)
-        change_comment = {'title': 'TITULO HERE',
-                          'text': 'O comentario foi editado'}
+        change_comment = {'text': 'O comentario foi editado'}
         res = self.client.put(
             reverse('comment-detail', kwargs={'pk': comment.id}),
             change_comment, format='json'
