@@ -14,7 +14,6 @@ from rest_framework.test import APIClient
 
 
 class CreateVoteTest(APITestCase):
-
     def setUp(self):
         user = User.objects.create(username="User01")
         self.client = APIClient()
@@ -112,14 +111,11 @@ class VoteQuerysetTest(APITestCase):
         assert response.data['message'] == 'Successfully un-voted'
 
     def test_exists(self):
-
         response = self.client.get(reverse('vote-list') + 'exists/', {'model': 'comment', 'id': str(self.comment.id)})
         assert response.status_code == 200
         assert response.data
 
     def test_all(self):
-
-
         # check after up-vote
         self.client.get(reverse('vote-list') + 'up/?model=comment&id='+str(self.comment.id)+'&vote=true')
         response = self.client.get(reverse('vote-list') + 'all/?model=comment&id='+str(self.comment.id))
@@ -133,8 +129,6 @@ class VoteQuerysetTest(APITestCase):
         assert len(response.data) == 0
 
     def test_count(self):
-
-
         # check before vote
         response = self.client.get(reverse('vote-list') + 'count/', {'model': 'comment', 'id': str(self.comment.id)})
         assert response.status_code == 200
