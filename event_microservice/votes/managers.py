@@ -50,12 +50,12 @@ class VotedQuerySet(QuerySet):
 
 
 class _VotableManager(models.Manager):
-    def __init__(self, through, model, instance, field_name='votes', extra_field=None):
+    def __init__(self, through, model, instance, field_name='votes'):
         self.through = through
         self.model = model
         self.instance = instance
         self.field_name = field_name
-        self.extra_field = extra_field
+
 
     @instance_required
     def up(self, user, vote):
@@ -68,17 +68,13 @@ class _VotableManager(models.Manager):
                 self.instance.save()
             else:
                 self.through(user=user, content_object=self.instance, vote=vote).save()
-                if self.extra_field:
-                    setattr(self.instance, self.extra_field, F(self.extra_field)+1)
-                    self.instance.save()
+
 
     @instance_required
     def down(self, user):
         with transaction.atomic():
             self.through.objects.filter(user=user, content_object=self.instance).delete()
-            if self.extra_field:
-                setattr(self.instance, self.extra_field, F(self.extra_field)-1)
-                self.instance.save()
+
 
     @instance_required
     def exists(self, user):
@@ -114,7 +110,6 @@ class VotableManager(GenericRelation):
         self.through = through
         self.manager = manager
         kwargs['verbose_name'] = kwargs.get('verbose_name', _('Votes'))
-        self.extra_field = kwargs.pop('extra_field', None)
         super(VotableManager, self).__init__(self.through, **kwargs)
 
     def __get__(self, instance, model):
@@ -126,7 +121,6 @@ class VotableManager(GenericRelation):
             model=model,
             instance=instance,
             field_name=self.name,
-            extra_field=self.extra_field,
         )
         return manager
 
