@@ -31,7 +31,10 @@ class ViewTestCase(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=user)
         self.comment_data = {'author': user.id,
-                             'text': 'O comentario vem aqui'}
+                             'text': 'O comentario vem aqui',
+                             'answerId': 0,
+                             'created': '2018-10-10',
+                             'edited': '2018-11-11'}
         self.response = self.client.post(
             reverse('comment-list'),
             self.comment_data,
