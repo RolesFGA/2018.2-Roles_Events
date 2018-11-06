@@ -1,2 +1,2 @@
-release: python manage.py migrate
-web: gunicorn reactdjango.wsgi --log-file -
+
+web: python event_microservice/manage.py makemigrations && python event_microservice/manage.py migrate && python event_microservice/manage.py runserver 
