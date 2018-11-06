@@ -1,4 +1,4 @@
-cd product_microservice
+cd event_microservice
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver 0.0.0.0:8002 
