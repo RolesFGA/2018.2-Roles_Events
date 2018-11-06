@@ -1,2 +1,1 @@
-
-web: python event_microservice/manage.py makemigrations && python event_microservice/manage.py migrate && python event_microservice/manage.py runserver 
+web: cd event_microservice && gunicorn event_microservice.wsgi --log-file -
