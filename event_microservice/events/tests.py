@@ -72,7 +72,7 @@ class ViewTestCase(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=user)
         self.event_data = {'eventName': 'Teste1',
-                           'owner': user.id,
+                           'owner': 'Henrique',
                            'eventDate': "2018-12-12",
                            'eventHour': "03:03:00",
                            'organizer': "Henrique",
@@ -111,6 +111,7 @@ class ViewTestCase(TestCase):
 
         event = Event.objects.get()
         change_event = {'eventName': 'Mudei este campo',
+                        'owner': 'Henrique',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "Henrique",
@@ -127,6 +128,7 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if a required field is blank """
 
         change_event = {'eventName': 'Mudei este campo',
+                        'owner': 'Henrique',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "", # Organizer é obrigatório, mas está em branco
@@ -143,6 +145,7 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if date is incorret """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Henrique',
                         'eventDate': "2018-05-05",
                         'eventHour': "03:03:00",
                         'organizer': "Henrique",
@@ -160,6 +163,7 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if value is negative """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Henrique',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "Henrique",
@@ -177,6 +181,7 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if linkReference field is not a URL """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Henrique',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "Henrique",
@@ -195,6 +200,7 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if linkReference field is not a URL """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Henrique',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "Henrique",
@@ -213,6 +219,7 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if file is not a image """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Henrique',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "Henrique",
@@ -228,24 +235,3 @@ class ViewTestCase(TestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         delete_temp_file()
-
-        """ Test the api cannot update if the user is not the owner """
-
-        user = User.objects.create(username="User02")
-        self.client = APIClient()
-        self.client.force_authenticate(user=user)
-
-        change_event = {'eventName': 'Teste',
-                        'eventDate': "2018-12-12",
-                        'eventHour': "03:03:00",
-                        'organizer': "Henrique",
-                        'value': 2,
-                        'address': "Here",
-                        'eventDescription': "Chato",
-                        'foods': "Comidas",
-                        'drinks': "Bebidas"}
-        res = self.client.put(
-            reverse('event-detail',
-            kwargs={'pk': event.id}), change_event, format='json'
-        )
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
