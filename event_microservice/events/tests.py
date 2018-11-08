@@ -5,6 +5,7 @@ from rest_framework import status
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
 
+
 def temporary_image():
     """ Returns a new temporary image file """
     import tempfile
@@ -15,19 +16,6 @@ def temporary_image():
     image.save(tmp_file, 'jpeg')
     tmp_file.seek(0)
     return tmp_file
-
-
-def temporary_file():
-    path = '/tmp/teste.txt'
-    f = open(path, 'w')
-    f.write('teste\n')
-    f.close()
-    f = open(path, 'rb')
-    return f
-
-def delete_temp_file():
-    import os
-    os.remove("/tmp/teste.txt")
 
 
 class ModelTestCase(TestCase):
@@ -45,15 +33,15 @@ class ModelTestCase(TestCase):
         self.foods = "Comidas"
         self.drinks = "Bebidas"
 
-        self.event = Event (eventName=self.eventName,
-                            owner=self.owner,
-                            eventDate=self.eventDate,
-                            eventHour=self.eventHour,
-                            organizer=self.organizer,
-                            address=self.address,
-                            eventDescription=self.eventDescription,
-                            foods=self.foods,
-                            drinks=self.drinks)
+        self.event = Event(eventName=self.eventName,
+                           owner=self.owner,
+                           eventDate=self.eventDate,
+                           eventHour=self.eventHour,
+                           organizer=self.organizer,
+                           address=self.address,
+                           eventDescription=self.eventDescription,
+                           foods=self.foods,
+                           drinks=self.drinks)
 
     def test_model_can_create_a_event(self):
         """Test the event model can create a event."""
@@ -98,8 +86,7 @@ class ViewTestCase(TestCase):
         """Test the api can get a given event."""
         event = Event.objects.get()
         response = self.client.get(
-            reverse('event-detail',
-            kwargs={'pk': event.id}), format="json")
+            reverse('event-detail', kwargs={'pk': event.id}), format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, event)
@@ -221,10 +208,9 @@ class ViewTestCase(TestCase):
                         'eventDescription': "Chato",
                         'foods': "Comidas",
                         'drinks': "Bebidas",
-                        'photo': temporary_file()}
+                        'photo': "teste.txt"}
         res = self.client.put(
             reverse('event-detail',
             kwargs={'pk': event.id}), change_event, format='multipart'
         )
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        delete_temp_file()

@@ -43,12 +43,7 @@ class VoteQueryset(viewsets.ModelViewSet):
                      "false": False}
         try:
             vote = vote_dict[vote_param]
-
-            model = request.query_params.get("model", None)
-            id = request.query_params.get("id", None)
-
-            content_type = ContentType.objects.get( model=model)
-            instance = content_type.get_object_for_this_type(pk=id)
+            instance = populate_instance(request)
             instance.votes.up(user, vote)
             message = "Successfully voted"
 
