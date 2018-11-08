@@ -4,7 +4,6 @@ from .models import Event
 from .serializers import EventSerializer
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from .permissions import IsOwnerOrReadOnly
 from rest_framework.parsers import FormParser, MultiPartParser
 
 

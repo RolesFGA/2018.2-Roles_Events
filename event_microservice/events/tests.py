@@ -108,7 +108,6 @@ class ViewTestCase(TestCase):
 
     def test_api_event_update(self):
         """Test the api can update a given event."""
-
         event = Event.objects.get()
         change_event = {'eventName': 'Mudei este campo',
                         'owner': 'Fulano',
@@ -126,7 +125,6 @@ class ViewTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         """ Test the api cannot update if a required field is blank """
-
         change_event = {'eventName': 'Mudei este campo',
                         'owner': 'Fulano',
                         'eventDate': "2018-12-12",
@@ -143,7 +141,6 @@ class ViewTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         """ Test the api cannot update if date is incorret """
-
         change_event = {'eventName': 'Teste',
                         'owner': 'Fulano',
                         'eventDate': "2018-05-05",
@@ -161,7 +158,6 @@ class ViewTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         """ Test the api cannot update if value is negative """
-
         change_event = {'eventName': 'Teste',
                         'owner': 'Fulano',
                         'eventDate': "2018-12-12",
@@ -179,7 +175,6 @@ class ViewTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         """ Test the api cannot update if linkReference field is not a URL """
-
         change_event = {'eventName': 'Teste',
                         'owner': 'Fulano',
                         'eventDate': "2018-12-12",
@@ -198,7 +193,6 @@ class ViewTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         """ Test the api cannot update if linkReference field is not a URL """
-
         change_event = {'eventName': 'Teste',
                         'owner': 'Fulano',
                         'eventDate': "2018-12-12",
@@ -217,7 +211,6 @@ class ViewTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         """ Test the api cannot update if file is not a image """
-
         change_event = {'eventName': 'Teste',
                         'owner': 'Fulano',
                         'eventDate': "2018-12-12",
