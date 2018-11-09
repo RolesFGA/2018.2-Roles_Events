@@ -15,8 +15,8 @@ script:
   - docker-compose up -d
   - docker-compose run web ./event_microservice/manage.py makemigrations
   - docker-compose run web ./event_microservice/manage.py migrate
-  - docker-compose run web bash cd event_microservice/ && coverage run --source=. manage.py test
-  - docker-compose run web bash cd event_microservice/ && coverage report
+  - docker-compose run web bash -c "cd event_microservice/ && coverage run --source=. manage.py test"
+  - docker-compose run web bash -c "cd event_microservice/ && coverage report"
 
 after_success:
-  - docker-compose run web bash cd event_microservice/ && coveralls
+  - docker-compose run web bash -c "cd event_microservice/ && coveralls"
