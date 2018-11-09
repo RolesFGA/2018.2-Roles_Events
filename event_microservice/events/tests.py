@@ -35,18 +35,18 @@ class ModelTestCase(TestCase):
 
     def setUp(self):
         """Define the test client and other test variables."""
-        user = User.objects.create(username="User01")
         self.eventName = "Teste"
+        self.owner = "Fulano"
         self.eventDate = "2018-12-12"
         self.eventHour = "03:03:00"
-        self.organizer = "Henrique"
+        self.organizer = "Fulano"
         self.address = "Here"
         self.eventDescription = "Chato"
         self.foods = "Comidas"
         self.drinks = "Bebidas"
 
         self.event = Event (eventName=self.eventName,
-                            owner=user,
+                            owner=self.owner,
                             eventDate=self.eventDate,
                             eventHour=self.eventHour,
                             organizer=self.organizer,
@@ -72,10 +72,10 @@ class ViewTestCase(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=user)
         self.event_data = {'eventName': 'Teste1',
-                           'owner': user.id,
+                           'owner': 'Fulano',
                            'eventDate': "2018-12-12",
                            'eventHour': "03:03:00",
-                           'organizer': "Henrique",
+                           'organizer': "Fulano",
                            'address': "Here",
                            'eventDescription': "Chato",
                            'foods': "Comidas",
@@ -111,9 +111,10 @@ class ViewTestCase(TestCase):
 
         event = Event.objects.get()
         change_event = {'eventName': 'Mudei este campo',
+                        'owner': 'Fulano',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
-                        'organizer': "Henrique",
+                        'organizer': "Fulano",
                         'address': "Here",
                         'eventDescription': "Chato",
                         'foods': "Comidas",
@@ -127,6 +128,7 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if a required field is blank """
 
         change_event = {'eventName': 'Mudei este campo',
+                        'owner': 'Fulano',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "", # Organizer é obrigatório, mas está em branco
@@ -143,9 +145,10 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if date is incorret """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Fulano',
                         'eventDate': "2018-05-05",
                         'eventHour': "03:03:00",
-                        'organizer': "Henrique",
+                        'organizer': "Fulano",
                         'value': 0,
                         'address': "Here",
                         'eventDescription': "Chato",
@@ -160,9 +163,10 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if value is negative """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Fulano',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
-                        'organizer': "Henrique",
+                        'organizer': "Fulano",
                         'value': -2,
                         'address': "Here",
                         'eventDescription': "Chato",
@@ -177,9 +181,10 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if linkReference field is not a URL """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Fulano',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
-                        'organizer': "Henrique",
+                        'organizer': "Fulano",
                         'value': 0,
                         'address': "Here",
                         'eventDescription': "Chato",
@@ -195,9 +200,10 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if linkReference field is not a URL """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Fulano',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
-                        'organizer': "Henrique",
+                        'organizer': "Fulano",
                         'value': 0,
                         'address': "Here",
                         'eventDescription': "Chato",
@@ -213,9 +219,10 @@ class ViewTestCase(TestCase):
         """ Test the api cannot update if file is not a image """
 
         change_event = {'eventName': 'Teste',
+                        'owner': 'Fulano',
                         'eventDate': "2018-12-12",
                         'eventHour': "03:03:00",
-                        'organizer': "Henrique",
+                        'organizer': "Fulano",
                         'value': 0,
                         'address': "Here",
                         'eventDescription': "Chato",
@@ -228,24 +235,3 @@ class ViewTestCase(TestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         delete_temp_file()
-
-        """ Test the api cannot update if the user is not the owner """
-
-        user = User.objects.create(username="User02")
-        self.client = APIClient()
-        self.client.force_authenticate(user=user)
-
-        change_event = {'eventName': 'Teste',
-                        'eventDate': "2018-12-12",
-                        'eventHour': "03:03:00",
-                        'organizer': "Henrique",
-                        'value': 2,
-                        'address': "Here",
-                        'eventDescription': "Chato",
-                        'foods': "Comidas",
-                        'drinks': "Bebidas"}
-        res = self.client.put(
-            reverse('event-detail',
-            kwargs={'pk': event.id}), change_event, format='json'
-        )
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
