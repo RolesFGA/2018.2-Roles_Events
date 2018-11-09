@@ -17,3 +17,6 @@ script:
   - docker-compose run web ./manage.py migrate
   - docker-compose run web coverage run ./manage.py test
   - docker-compose run web coverage report
+
+after_success:
+  - docker-compose run web coveralls
