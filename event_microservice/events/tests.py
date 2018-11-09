@@ -86,7 +86,7 @@ class ViewTestCase(TestCase):
         """Test the api can get a given event."""
         event = Event.objects.get()
         response = self.client.get(
-            reverse('event-detail', kwargs={'pk': event.id}), format="json")
+        reverse('event-detail', kwargs={'pk': event.id}), format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, event)
