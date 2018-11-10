@@ -4,10 +4,7 @@ from django.db.models import Count, F
 from django.db.models.query import QuerySet
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-try:
-    from django.contrib.contenttypes.fields import GenericRelation
-except ImportError:
-    from django.contrib.contenttypes.generic import GenericRelation
+from django.contrib.contenttypes.fields import GenericRelation
 
 from .models import Vote
 from .utils import instance_required
@@ -42,11 +39,6 @@ class VotedQuerySet(QuerySet):
         self._result_cache = objects
         return iter(objects)
 
-    def _clone(self):
-        c = super(VotedQuerySet, self)._clone()
-        c.user = self.user
-        return c
-
 
 class _VotableManager(models.Manager):
     def __init__(self, through, model, inst, field_name='votes'):
@@ -59,7 +51,7 @@ class _VotableManager(models.Manager):
     def up(self, user, vote):
         with transaction.atomic():
             if self.through.objects.filter(user=user,
-                                           content_object=self.instance).exists():
+                content_object=self.instance).exists():
                 c_type = ContentType.objects.get_for_model(self.instance)
                 vote_obj = self.through.objects.get(user=user,
                                                     object_id=self.instance.id,
@@ -80,27 +72,34 @@ class _VotableManager(models.Manager):
 
     @instance_required
     def exists(self, user):
-        return self.through.objects.filter(user=user,
-                                           content_object=self.instance).exists()
+        var = self.through.objects.filter(user=user,
+                                          content_object=self.instance).exists()
+
+        return var
 
     def all(self, user):
         content_type = ContentType.objects.get_for_model(self.model)
         object_ids = self.through.objects.filter(user=user,
-                                                 content_type=content_type).values_list('object_id', flat=True)
+        content_type=content_type).values_list('object_id', flat=True)
         return self.model.objects.filter(pk__in=list(object_ids))
 
     def count(self, vote=None):
         if vote is None:
             return self.through.votes_for(self.model, self.instance).count()
         else:
-            return self.through.votes_for(self.model,
-                                          self.instance).filter(vote=vote).count()
+            v = self.through.votes_for(self.model,
+                                        self.instance).filter(vote=vote).count()
+            return v
 
     def likes(self):
-        return self.through.votes_for(self.model, self.instance).values_list("vote", flat=True)
+        return self.through.votes_for(self.model,
+                                      self.instance).values_list("vote",
+                                                                 flat=True)
 
     def users(self):
-        return self.through.votes_for(self.model, self.instance).order_by('-create_at').values_list('user_id', 'create_at')
+        return self.through.votes_for(self.model,
+        self.instance).order_by('-create_at').values_list('user_id',
+                                                          'create_at')
 
     def annotate(self,
                  queryset=None,
@@ -109,7 +108,10 @@ class _VotableManager(models.Manager):
                  reverse=True):
         order = reverse and '-%s' % annotation or annotation
         kwargs = {annotation: Count('%s__user' % self.field_name)}
-        queryset = queryset if queryset is not None else self.model.objects.all()
+        if queryset is not None:
+            queryset = queryset
+        else:
+            queryset = self.model.objects.all()
         queryset = queryset.annotate(**kwargs).order_by(order, '-id')
         return VotedQuerySet(model=queryset.model,
                              query=queryset.query,
