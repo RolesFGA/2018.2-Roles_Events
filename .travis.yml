@@ -19,4 +19,4 @@ script:
   - docker-compose run web bash -c "cd event_microservice/ && coverage report"
 
 after_success:
-  - docker-compose run web bash -c "cd event_microservice/ && coveralls"
+  - docker-compose run -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" -e TRAVIS_BRANCH="$TRAVIS_BRANCH" web bash -c "cd event_microservice/ && coveralls"
