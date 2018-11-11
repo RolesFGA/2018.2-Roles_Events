@@ -8,6 +8,7 @@ def not_negative(value):
     if value < 0:
         raise ValidationError('Numero não pode ser negativo')
 
+
 def corret_time(value):
     today = date.today()
     if value < today:
@@ -15,20 +16,23 @@ def corret_time(value):
 
 
 class Event(models.Model):
-    owner = models.CharField("Dono do evento", max_length=50)
-    eventName = models.CharField("Nome do Evento", max_length=50)
-    linkReference = models.URLField("Link de Referência", max_length=200, default="")
-    organizer = models.CharField("Nome para Contato", max_length=50)
-    value = models.DecimalField("Valor do Ingresso", max_digits=12, decimal_places=2, validators=[not_negative], default=0.00)
-    address = models.CharField("Local do Evento", max_length=50)
-    linkAddress = models.URLField("Localização no Google Maps", max_length=200, default="")
-    eventDate = models.DateField("Data do Rolê", auto_now=False, help_text="DD/MM/AAAA", validators=[corret_time])
-    eventHour = models.TimeField("Horário do Rolê", auto_now=False)
-    adultOnly = models.BooleanField("+18", default=False, help_text="Marque caso seja só para adultos")
-    eventDescription = models.TextField("Descrição", help_text="Descrição do evento")
-    photo = models.ImageField("Foto", default="")
-    foods = models.TextField("Comidas")
-    drinks = models.TextField("Bebidas")
+    owner = models.CharField(max_length=50)
+    eventName = models.CharField(max_length=50)
+    linkReference = models.URLField(max_length=200, default="")
+    organizer = models.CharField(max_length=50)
+    value = models.DecimalField(max_digits=12,
+                                decimal_places=2,
+                                validators=[not_negative],
+                                default=0.00)
+    address = models.CharField(max_length=50)
+    linkAddress = models.URLField(max_length=200, default="")
+    eventDate = models.DateField(auto_now=False, validators=[corret_time])
+    eventHour = models.TimeField(auto_now=False)
+    adultOnly = models.BooleanField(default=False)
+    eventDescription = models.TextField()
+    photo = models.ImageField(default="")
+    foods = models.TextField()
+    drinks = models.TextField()
     votes = VotableManager()
 
     class Meta:
