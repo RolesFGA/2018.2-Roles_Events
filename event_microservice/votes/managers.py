@@ -72,10 +72,10 @@ class _VotableManager(models.Manager):
 
     @instance_required
     def exists(self, user):
-        var = self.through.objects.filter(user=user,
-                                          content_object=self.instance).exists()
+        v = self.through.objects.filter(user=user,
+                                        content_object=self.instance).exists()
 
-        return var
+        return v
 
     def all(self, user):
         content_type = ContentType.objects.get_for_model(self.model)
@@ -108,9 +108,7 @@ class _VotableManager(models.Manager):
                  reverse=True):
         order = reverse and '-%s' % annotation or annotation
         kwargs = {annotation: Count('%s__user' % self.field_name)}
-        if queryset is not None:
-            queryset = queryset
-        else:
+        if queryset is None:
             queryset = self.model.objects.all()
         queryset = queryset.annotate(**kwargs).order_by(order, '-id')
         return VotedQuerySet(model=queryset.model,
