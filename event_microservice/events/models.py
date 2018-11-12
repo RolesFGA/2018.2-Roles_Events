@@ -30,7 +30,7 @@ class Event(models.Model):
     eventHour = models.TimeField(auto_now=False)
     adultOnly = models.BooleanField(default=False)
     eventDescription = models.TextField()
-    photo = models.ImageField(default="")
+    photo = models.URLField(default="")
     foods = models.TextField()
     drinks = models.TextField()
     votes = VotableManager()
