@@ -4,24 +4,12 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
-import tempfile
-from PIL import Image
 
-
-def temporary_image():
-    """ Returns a new temporary image file """
-
-    image = Image.new("RGB", (512, 512), "white")
-    tmp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
-    image.save(tmp_file, 'jpeg')
-    tmp_file.seek(0)
-    return tmp_file
 
 def populate_response(self, event, change_event):
-    return self.client.put(reverse('event-detail',
-                                   kwargs={'pk': event.id}),
-                                   change_event,
-                                   format='json')
+    return self.client.put(reverse('event-detail', kwargs={'pk': event.id}),
+                           change_event,
+                           format='json')
 
 
 class ModelTestCase(TestCase):
@@ -73,8 +61,7 @@ class ViewTestCase(TestCase):
                            'address': "Here",
                            'eventDescription': "Chato",
                            'foods': "Comidas",
-                           'drinks': "Bebidas",
-                           'photo': temporary_image()}
+                           'drinks': "Bebidas"}
         self.response1 = self.client.post(
             reverse('event-list'),
             self.event_data,
@@ -91,11 +78,11 @@ class ViewTestCase(TestCase):
     def test_api_event_get(self):
         """Test the api can get a given event."""
         event = Event.objects.get()
-        response = self.client.get(
-        reverse('event-detail', kwargs={'pk': event.id}), format="json")
+        res = self.client.get(reverse('event-detail', kwargs={'pk': event.id}),
+                              format="json")
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertContains(response, event)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertContains(res, event)
 
     """ Test: Updating """
 
