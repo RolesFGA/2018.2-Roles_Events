@@ -18,7 +18,8 @@ class ModelTestCase(TestCase):
     def setUp(self):
         """Define the test client and other test variables."""
         self.eventName = "Teste"
-        self.owner = "Fulano"
+        self.ownerName = "Fulano"
+        self.ownerID = 1
         self.eventDate = "2099-12-14"
         self.eventHour = "03:03:00"
         self.organizer = "Fulano"
@@ -28,7 +29,8 @@ class ModelTestCase(TestCase):
         self.drinks = "Bebidas"
 
         self.event = Event(eventName=self.eventName,
-                           owner=self.owner,
+                           ownerName=self.ownerName,
+                           ownerID=self.ownerID,
                            eventDate=self.eventDate,
                            eventHour=self.eventHour,
                            organizer=self.organizer,
@@ -54,7 +56,7 @@ class ViewTestCase(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=user)
         self.event_data = {'eventName': 'Teste1',
-                           'owner': 'Fulano',
+                           'ownerName': 'Fulano',
                            'eventDate': "2099-12-15",
                            'eventHour': "03:03:00",
                            'organizer': "Fulano",
@@ -90,7 +92,7 @@ class ViewTestCase(TestCase):
         """Test the api can update a given event."""
         event = Event.objects.get()
         change_event = {'eventName': 'Mudei este campo',
-                        'owner': 'Fulano',
+                        'ownerName': 'Fulano',
                         'eventDate': "2099-12-13",
                         'eventHour': "03:03:00",
                         'organizer': "Fulano",
@@ -103,7 +105,7 @@ class ViewTestCase(TestCase):
 
         """ Test the api cannot update if a required field is blank """
         change_event = {'eventName': 'Mudei este campo',
-                        'owner': 'Fulano',
+                        'ownerName': 'Fulano',
                         'eventDate': "2099-12-16",
                         'eventHour': "03:03:00",
                         'organizer': "",  # Organizer é obrigatório
@@ -116,7 +118,7 @@ class ViewTestCase(TestCase):
 
         """ Test the api cannot update if linkReference field is not a URL """
         change_event = {'eventName': 'Teste',
-                        'owner': 'Fulano',
+                        'ownerName': 'Fulano',
                         'eventDate': "2099-12-18",
                         'eventHour': "03:03:00",
                         'organizer': "Fulano",
@@ -131,7 +133,7 @@ class ViewTestCase(TestCase):
 
         """ Test the api cannot update if linkReference field is not a URL """
         change_event = {'eventName': 'Teste',
-                        'owner': 'Fulano',
+                        'ownerName': 'Fulano',
                         'eventDate': "2099-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "Fulano",
@@ -146,7 +148,7 @@ class ViewTestCase(TestCase):
 
         """ Test the api cannot update if file is not a image """
         change_event = {'eventName': 'Teste',
-                        'owner': 'Fulano',
+                        'ownerName': 'Fulano',
                         'eventDate': "2099-12-12",
                         'eventHour': "03:03:00",
                         'organizer': "Fulano",
@@ -159,32 +161,32 @@ class ViewTestCase(TestCase):
         response = populate_response(self, event, change_event)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        def test_api_event_validators(self):
-            event = Event.objects.get()
-            """ Test the api cannot update if date is incorret """
-            change_event = {'eventName': 'Teste',
-                            'owner': 'Fulano',
-                            'eventDate': "2018-05-05",
-                            'eventHour': "03:03:00",
-                            'organizer': "Fulano",
-                            'value': 0,
-                            'address': "Here",
-                            'eventDescription': "Chato",
-                            'foods': "Comidas",
-                            'drinks': "Bebidas"}
-            response = populate_response(self, event, change_event)
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_api_event_validators(self):
+        event = Event.objects.get()
+        """ Test the api cannot update if date is incorret """
+        change_event = {'eventName': 'Teste',
+                        'ownerName': 'Fulano',
+                        'eventDate': "2018-05-05",
+                        'eventHour': "03:03:00",
+                        'organizer': "Fulano",
+                        'value': 0,
+                        'address': "Here",
+                        'eventDescription': "Chato",
+                        'foods': "Comidas",
+                        'drinks': "Bebidas"}
+        response = populate_response(self, event, change_event)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-            """ Test the api cannot update if value is negative """
-            change_event = {'eventName': 'Teste',
-                            'owner': 'Fulano',
-                            'eventDate': "2099-12-17",
-                            'eventHour': "03:03:00",
-                            'organizer': "Fulano",
-                            'value': -2,
-                            'address': "Here",
-                            'eventDescription': "Chato",
-                            'foods': "Comidas",
-                            'drinks': "Bebidas"}
-            response = populate_response(self, event, change_event)
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        """ Test the api cannot update if value is negative """
+        change_event = {'eventName': 'Teste',
+                        'ownerName': 'Fulano',
+                        'eventDate': "2099-12-17",
+                        'eventHour': "03:03:00",
+                        'organizer': "Fulano",
+                        'value': -2,
+                        'address': "Here",
+                        'eventDescription': "Chato",
+                        'foods': "Comidas",
+                        'drinks': "Bebidas"}
+        response = populate_response(self, event, change_event)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
