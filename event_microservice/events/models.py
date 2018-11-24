@@ -16,7 +16,8 @@ def corret_time(value):
 
 
 class Event(models.Model):
-    owner = models.CharField(max_length=50)
+    ownerName = models.CharField(max_length=50)
+    ownerID = models.IntegerField(default=0)
     eventName = models.CharField(max_length=50)
     linkReference = models.URLField(max_length=200, default="")
     organizer = models.CharField(max_length=50)

@@ -87,10 +87,10 @@ class VoteQuerysetTest(APITestCase):
         self.client.force_authenticate(user=user)
 
         self.event = Event.objects.create(eventName= 'Teste1',
-                                          owner=user,
+                                          ownerName="user",
                                           eventDate= "2018-12-12",
                                           eventHour= "03:03:00",
-                                          organizer= "Henrique",
+                                          organizer= "Fulano",
                                           address= "Here",
                                           eventDescription= "Chato",
                                           foods= "Comidas",
