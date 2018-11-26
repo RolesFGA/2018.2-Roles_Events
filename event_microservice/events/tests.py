@@ -27,6 +27,7 @@ class ModelTestCase(TestCase):
         self.eventDescription = "Chato"
         self.foods = "Comidas"
         self.drinks = "Bebidas"
+        self.photo = "https://www.google.com/"
 
         self.event = Event(eventName=self.eventName,
                            ownerName=self.ownerName,
@@ -37,7 +38,8 @@ class ModelTestCase(TestCase):
                            address=self.address,
                            eventDescription=self.eventDescription,
                            foods=self.foods,
-                           drinks=self.drinks)
+                           drinks=self.drinks,
+                           photo=self.photo)
 
     def test_model_can_create_a_event(self):
         """Test the event model can create a event."""
@@ -63,7 +65,8 @@ class ViewTestCase(TestCase):
                            'address': "Here",
                            'eventDescription': "Chato",
                            'foods': "Comidas",
-                           'drinks': "Bebidas"}
+                           'drinks': "Bebidas",
+                           'photo': 'https://www.google.com/'}
         self.response1 = self.client.post(
             reverse('event-list'),
             self.event_data,
@@ -99,7 +102,8 @@ class ViewTestCase(TestCase):
                         'address': "Here",
                         'eventDescription': "Chato",
                         'foods': "Comidas",
-                        'drinks': "Bebidas"}
+                        'drinks': "Bebidas",
+                        'photo': 'https://www.google.com/'}
         response = populate_response(self, event, change_event)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -112,11 +116,12 @@ class ViewTestCase(TestCase):
                         'address': "Here",
                         'eventDescription': "Chato",
                         'foods': "Comidas",
-                        'drinks': "Bebidas"}
+                        'drinks': "Bebidas",
+                        'photo': 'https://www.google.com/'}
         response = populate_response(self, event, change_event)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        """ Test the api cannot update if linkReference field is not a URL """
+        """ Test the api cannot update if linkReference field is not a valid URL """
         change_event = {'eventName': 'Teste',
                         'ownerName': 'Fulano',
                         'eventDate': "2099-12-18",
@@ -127,11 +132,12 @@ class ViewTestCase(TestCase):
                         'eventDescription': "Chato",
                         'foods': "Comidas",
                         'drinks': "Bebidas",
-                        'linkReference': 'incorrect.com'}
+                        'linkReference': 'incorrect.com',
+                        'photo': 'https://www.google.com/'}
         response = populate_response(self, event, change_event)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        """ Test the api cannot update if linkReference field is not a URL """
+        """ Test the api cannot update if linkReference field is not a valid URL """
         change_event = {'eventName': 'Teste',
                         'ownerName': 'Fulano',
                         'eventDate': "2099-12-12",
@@ -142,22 +148,7 @@ class ViewTestCase(TestCase):
                         'eventDescription': "Chato",
                         'foods': "Comidas",
                         'drinks': "Bebidas",
-                        'linkAddress': 'incorrect.com'}
-        response = populate_response(self, event, change_event)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        """ Test the api cannot update if file is not a image """
-        change_event = {'eventName': 'Teste',
-                        'ownerName': 'Fulano',
-                        'eventDate': "2099-12-12",
-                        'eventHour': "03:03:00",
-                        'organizer': "Fulano",
-                        'value': 0,
-                        'address': "Here",
-                        'eventDescription': "Chato",
-                        'foods': "Comidas",
-                        'drinks': "Bebidas",
-                        'photo': "teste.txt"}
+                        'photo': "google.com"}
         response = populate_response(self, event, change_event)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
