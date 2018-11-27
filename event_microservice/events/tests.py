@@ -121,23 +121,7 @@ class ViewTestCase(TestCase):
         response = populate_response(self, event, change_event)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        """ Test the api cannot update if linkReference field is not a valid URL """
-        change_event = {'eventName': 'Teste',
-                        'ownerName': 'Fulano',
-                        'eventDate': "2099-12-18",
-                        'eventHour': "03:03:00",
-                        'organizer': "Fulano",
-                        'value': 0,
-                        'address': "Here",
-                        'eventDescription': "Chato",
-                        'foods': "Comidas",
-                        'drinks': "Bebidas",
-                        'linkReference': 'incorrect.com',
-                        'photo': 'https://www.google.com/'}
-        response = populate_response(self, event, change_event)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        """ Test the api cannot update if linkReference field is not a valid URL """
+        """ Test the api cannot update if photo field is not a valid URL """
         change_event = {'eventName': 'Teste',
                         'ownerName': 'Fulano',
                         'eventDate': "2099-12-12",

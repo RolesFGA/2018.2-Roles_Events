@@ -16,27 +16,26 @@ def corret_time(value):
 
 
 class Event(models.Model):
-    ownerName = models.CharField(max_length=50, default="")
-    ownerID = models.IntegerField(default=0)
+    ownerName = models.CharField(max_length=50, null=True)
+    ownerID = models.IntegerField(null=True)
     eventName = models.CharField(max_length=100)
-    linkReference = models.URLField(max_length=200, default="")
     organizer = models.CharField(max_length=50)
     value = models.DecimalField(max_digits=12,
                                 decimal_places=2,
                                 validators=[not_negative],
-                                default=0.00)
+                                null=True)
     address = models.TextField()
-    latitude = models.FloatField(default=0.0)
-    latitudeDelta = models.FloatField(default=0.0)
-    longitude = models.FloatField(default=0.0)
-    longitudeDelta = models.FloatField(default=0.0)
+    latitude = models.FloatField(null=True)
+    latitudeDelta = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
+    longitudeDelta = models.FloatField(null=True)
     eventDate = models.DateField(auto_now=False, validators=[corret_time])
     eventHour = models.TimeField(auto_now=False)
     adultOnly = models.BooleanField(default=False)
-    eventDescription = models.TextField(default="")
+    eventDescription = models.TextField(null=True)
     photo = models.URLField()
-    foods = models.TextField(default="")
-    drinks = models.TextField(default="")
+    foods = models.TextField(null=True)
+    drinks = models.TextField(null=True)
     votes = VotableManager()
 
     class Meta:
