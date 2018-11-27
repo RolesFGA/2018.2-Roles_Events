@@ -19,7 +19,6 @@ class Event(models.Model):
     ownerName = models.CharField(max_length=50, null=True)
     ownerID = models.IntegerField(null=True)
     eventName = models.CharField(max_length=100)
-    linkReference = models.URLField(max_length=200, null=True)
     organizer = models.CharField(max_length=50)
     value = models.DecimalField(max_digits=12,
                                 decimal_places=2,
